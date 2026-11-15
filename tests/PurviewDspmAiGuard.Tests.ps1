@@ -46,6 +46,28 @@ Describe 'Microsoft Purview DSPM for AI & Grounding Leakage Guard Verification S
             $res.InjectionDetected | Should -BeFalse
             $res.Verdict | Should -Be 'CLEAN_GROUNDING_TEXT'
         }
+
+        It 'Fails closed when -UseLiveFoundry is set without -FoundryEndpoint and supports mocked live Foundry REST call' {
+            $case = $script:Cases | Where-Object { $_.caseId -eq 'DSPM-301' }
+            { & $script:AuditScript -GroundingCase $case -UseLiveFoundry } | Should -Throw '*FoundryEndpoint*'
+
+            Mock Invoke-RestMethod {
+                return [PSCustomObject]@{
+                    choices = @(
+                        [PSCustomObject]@{
+                            message = [PSCustomObject]@{
+                                content = '{"decision":"PERMIT_GROUNDING_CHUNK","rationale":"General chunk cleared for Confidential caller."}'
+                            }
+                        }
+                    )
+                }
+            }
+
+            $res = & $script:AuditScript -GroundingCase $case -UseLiveFoundry -FoundryEndpoint 'https://contoso-foundry.openai.azure.com' -FoundryApiKey 'test-key'
+            $res.InferenceMode | Should -Be 'LIVE_FOUNDRY'
+            $res.Decision | Should -Be 'PERMIT_GROUNDING_CHUNK'
+            Should -Invoke Invoke-RestMethod -Times 1
+        }
     }
 
     Context 'Microsoft Graph v2.x SharePoint Quarantine & Zero-Leak Governance' {
