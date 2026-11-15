@@ -1,0 +1,16 @@
+// Purview-AiGrounding-Exposure.kql
+// Correlates Microsoft Purview DSPM for AI grounding events with Azure AI Search retrieval audits and SharePoint oversharing alerts.
+CloudAppEvents
+| where Timestamp > ago(24h)
+| where ActionType in ("CopilotInteraction", "AiGroundingRetrieval", "SharingSet")
+| extend PurviewLabel = tostring(RawEventData.SensitivityLabelId),
+         SiteUrl = tostring(RawEventData.SiteUrl),
+         IsOvershared = tobool(RawEventData.HasEveryoneExceptExternalLink),
+         BlockedByDspm = tobool(RawEventData.BlockedByGroundingGuard)
+| where IsOvershared == true or BlockedByDspm == true
+| summarize
+    BlockedChunks = countif(BlockedByDspm == true),
+    OversharedHits = countif(IsOvershared == true),
+    DistinctUsers = dcount(AccountUpn)
+    by bin(Timestamp, 1h), SiteUrl, PurviewLabel
+| order by BlockedChunks desc, OversharedHits desc

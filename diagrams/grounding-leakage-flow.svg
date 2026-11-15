@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <defs>
+    <style>
+      .title { font: 700 30px 'Segoe UI', system-ui, sans-serif; fill: #f8fafc; }
+      .subtitle { font: 400 17px 'Segoe UI', system-ui, sans-serif; fill: #94a3b8; }
+      .actor { font: 700 16px 'Segoe UI', system-ui, sans-serif; fill: #f1f5f9; text-anchor: middle; }
+      .actor-sub { font: 400 12px 'Cascadia Code', Consolas, monospace; fill: #7dd3fc; text-anchor: middle; }
+      .msg { font: 600 14px 'Segoe UI', system-ui, sans-serif; fill: #e2e8f0; }
+      .proto { font: 600 12px 'Cascadia Code', Consolas, monospace; fill: #38bdf8; }
+      .branch-title { font: 700 14px 'Segoe UI', system-ui, sans-serif; fill: #f8fafc; }
+    </style>
+    <marker id="arr-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arr-e" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+    </marker>
+    <marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arr-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+    </marker>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#0a1128"/>
+  <text x="64" y="64" class="title">Purview Grounding Leakage Guard &amp; SharePoint Quarantine Sequence</text>
+  <text x="64" y="94" class="subtitle">Fail-Closed Sensitivity Enforcement, Indirect Prompt-Injection Quarantine, and Graph v2.x Permission Revocation</text>
+
+  <!-- Actors -->
+  <g>
+    <rect x="75" y="130" width="230" height="72" rx="8" fill="#172554" stroke="#38bdf8" stroke-width="2"/>
+    <text x="190" y="162" class="actor">Entra User / Copilot</text>
+    <text x="190" y="184" class="actor-sub">Clearance: General</text>
+    <line x1="190" y1="202" x2="190" y2="990" stroke="#334155" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <rect x="375" y="130" width="240" height="72" rx="8" fill="#172554" stroke="#38bdf8" stroke-width="2"/>
+    <text x="495" y="162" class="actor">Azure AI Search</text>
+    <text x="495" y="184" class="actor-sub">172.22.4.12 (RAG Index)</text>
+    <line x1="495" y1="202" x2="495" y2="990" stroke="#334155" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <rect x="685" y="130" width="260" height="72" rx="8" fill="#172554" stroke="#a855f7" stroke-width="2"/>
+    <text x="815" y="162" class="actor">Grounding Guard AI</text>
+    <text x="815" y="184" class="actor-sub">Invoke-GroundingLeakageAudit</text>
+    <line x1="815" y1="202" x2="815" y2="990" stroke="#334155" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <rect x="1015" y="130" width="240" height="72" rx="8" fill="#172554" stroke="#10b981" stroke-width="2"/>
+    <text x="1135" y="162" class="actor">Foundry LLM</text>
+    <text x="1135" y="184" class="actor-sub">172.22.8.25 (Context)</text>
+    <line x1="1135" y1="202" x2="1135" y2="990" stroke="#334155" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <rect x="1325" y="130" width="240" height="72" rx="8" fill="#172554" stroke="#ef4444" stroke-width="2"/>
+    <text x="1445" y="162" class="actor">Graph v2.x SharePoint</text>
+    <text x="1445" y="184" class="actor-sub">DELETE /sites/{id}/perms</text>
+    <line x1="1445" y1="202" x2="1445" y2="990" stroke="#334155" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <rect x="1625" y="130" width="220" height="72" rx="8" fill="#172554" stroke="#6366f1" stroke-width="2"/>
+    <text x="1735" y="162" class="actor">Teams CISO Channel</text>
+    <text x="1735" y="184" class="actor-sub">Adaptive Card v1.5</text>
+    <line x1="1735" y1="202" x2="1735" y2="990" stroke="#334155" stroke-width="2" stroke-dasharray="6 6"/>
+  </g>
+
+  <!-- Step 1 -->
+  <line x1="190" y1="255" x2="495" y2="255" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-c)"/>
+  <text x="210" y="244" class="msg">1. Query RAG copilot with Entra token</text>
+
+  <line x1="495" y1="315" x2="815" y2="315" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-c)"/>
+  <text x="515" y="304" class="msg">2. Return candidate chunks + Purview labels + EEEU flags</text>
+
+  <!-- Guardrails Alt Box -->
+  <rect x="780" y="355" width="700" height="275" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="800" y="383" class="branch-title">ALT: Purview Sensitivity &amp; Injection Gates</text>
+
+  <line x1="815" y1="425" x2="1445" y2="425" stroke="#ef4444" stroke-width="2.5" marker-end="url(#arr-r)"/>
+  <text x="835" y="413" class="msg">3a. Indirect Injection -&gt; QUARANTINE_INDIRECT_PROMPT_INJECTION</text>
+
+  <line x1="815" y1="485" x2="1445" y2="485" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arr-a)"/>
+  <text x="835" y="473" class="msg">3b. Unlabeled + EEEU -&gt; ABSTAIN_UNLABELED_OVERSHARED_SITE</text>
+
+  <line x1="815" y1="545" x2="1445" y2="545" stroke="#ef4444" stroke-width="2.5" marker-end="url(#arr-r)"/>
+  <text x="835" y="533" class="msg">3c. Highly Confidential + EEEU -&gt; BLOCK_OVERSHARED_HIGHLY_CONFIDENTIAL</text>
+
+  <line x1="815" y1="605" x2="1135" y2="605" stroke="#10b981" stroke-width="2.5" marker-end="url(#arr-e)"/>
+  <text x="835" y="593" class="msg">3d. Clearance Satisfied -&gt; PERMIT_GROUNDING_CHUNK</text>
+
+  <!-- Step 4: Graph Remediation -->
+  <line x1="1445" y1="705" x2="1445" y2="755" stroke="#ef4444" stroke-width="2"/>
+  <line x1="1445" y1="735" x2="1735" y2="735" stroke="#ef4444" stroke-width="2.5" marker-end="url(#arr-r)"/>
+  <text x="1465" y="723" class="msg">4. Revoke EEEU + Post CISO Card</text>
+  <text x="1465" y="753" class="proto">Graph v1.0 /sites/{id}/permissions</text>
+
+  <!-- Step 5: Safe Response -->
+  <line x1="1135" y1="840" x2="190" y2="840" stroke="#10b981" stroke-width="2.5" marker-end="url(#arr-e)"/>
+  <text x="210" y="828" class="msg">5. Return Purview-compliant grounded answer (zero leakage)</text>
+
+  <text x="64" y="1038" class="subtitle">Contoso Sovereign Platform | Microsoft Purview DSPM for AI Sequence</text>
+</svg>

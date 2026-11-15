@@ -1,0 +1,8 @@
+.env
+*.pfx
+*.key
+*.pem
+TestResults/
+coverage.xml
+.DS_Store
+Thumbs.db
