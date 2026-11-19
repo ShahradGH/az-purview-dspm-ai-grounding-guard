@@ -88,4 +88,50 @@ Describe 'Microsoft Purview DSPM for AI & Grounding Leakage Guard Verification S
             (Get-Item (Join-Path $script:RepoRoot 'docs/DSPM-AI-GOVERNANCE-RUNBOOK.md')).Length | Should -BeGreaterThan 2048
         }
     }
+
+    Context 'Identity & Microsoft Graph v2.x Purview Clearance Module' {
+        BeforeAll {
+            Import-Module (Join-Path $script:RepoRoot 'identity/PurviewIdentityClearance.psd1') -Force
+        }
+
+        It 'Maps Entra ID transitive security group to Highly Confidential clearance rank' {
+            $mockGraph = {
+                param($m, $u, $b)
+                return [PSCustomObject]@{
+                    value = @(
+                        [PSCustomObject]@{ id = 'g-1'; displayName = 'SG-Clearance-HighlyConfidential' }
+                    )
+                }
+            }
+
+            $res = Get-EntraCallerClearanceTier -UserPrincipalName 'ciso@contoso.com' -GraphInvoker $mockGraph
+            $res.MaxLabelTier | Should -Be 'Highly Confidential'
+            $res.ClearanceRank | Should -Be 3
+        }
+
+        It 'Flags SharePoint sites with EEEU or spo-grid-all-users grants as unsafe for AI grounding' {
+            $mockGraph = {
+                param($m, $u, $b)
+                return [PSCustomObject]@{
+                    value = @(
+                        [PSCustomObject]@{
+                            id = 'perm-eeeu'
+                            roles = @('read')
+                            grantedToIdentitiesV2 = @([PSCustomObject]@{ siteUser = @{ loginName = 'spo-grid-all-users/tenant' } })
+                        }
+                    )
+                }
+            }
+
+            $res = Test-SharePointSiteGuestExposure -SiteId 'contoso.sharepoint.com,1,2' -GraphInvoker $mockGraph
+            $res.SafeForAiGrounding | Should -BeFalse
+            $res.OversharedGrantCount | Should -Be 1
+        }
+
+        It 'Revokes overshared SharePoint permission grant via Graph DELETE' {
+            $mockGraph = { param($m, $u, $b) return $null }
+            $res = Revoke-SharePointOversharingGrant -SiteId 'contoso.sharepoint.com,1,2' -PermissionId 'perm-eeeu' -GraphInvoker $mockGraph
+            $res.Revoked | Should -BeTrue
+        }
+    }
 }

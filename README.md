@@ -8,10 +8,10 @@
 
 ---
 
-## 1. Executive & C-Suite Brief
+## 1. Executive & C-Suite Business Value
 
 ### Business Risk: AI Grounding Accelerates Latent Oversharing
-Enterprise SharePoint estates routinely accumulate years of `EveryoneExceptExternalUsers` (EEEU) and broad internal sharing links on M&A vaults, HR severance folders, and executive board packs. Before generative AI, those files remained buried in folder hierarchies. The moment an enterprise connects **Azure AI Search** or **Microsoft 365 Copilot** to SharePoint, semantic retrieval surfaces those overshared documents in seconds—turning latent permission debt into an immediate **GDPR**, **DORA**, and **insider-threat** breach.
+Enterprise SharePoint estates routinely accumulate years of `EveryoneExceptExternalUsers` (EEEU) and broad internal sharing links on M&A vaults, HR severance folders, and executive board packs. Before generative AI, those files remained buried in folder hierarchies. The moment an enterprise connects **Azure AI Search** or **Microsoft 365 Copilot** to SharePoint, semantic retrieval surfaces those overshared documents in seconds—turning latent permission debt into an immediate **UK-GDPR**, **DORA**, and **insider-threat** breach.
 
 ### Commercial ROI & Compliance Impact
 | Metric | Unprotected RAG / Copilot Rollout | Purview DSPM + Grounding Leakage Guard |
@@ -20,6 +20,8 @@ Enterprise SharePoint estates routinely accumulate years of `EveryoneExceptExter
 | **Indirect Prompt Injection via SharePoint Docs** | Model follows embedded instructions | **Quarantined** by `Test-PromptInjectionSensitivityBoundary` |
 | **Unlabeled Overshared Sites** | Grounded by default | **Fail-closed abstention** (`ABSTAIN_UNLABELED_OVERSHARED_SITE`) |
 | **CISO Remediation Time** | Weeks of manual SharePoint audits | **Minutes** via Graph v2.x + Teams Adaptive Card |
+
+- **Board-Level Regulatory Defensibility**: Every AI grounding block and SharePoint permission revocation emits a deterministic audit receipt, demonstrating active technical safeguards under UK-GDPR Article 32 and DORA ICT risk governance.
 
 ---
 
@@ -44,9 +46,15 @@ Enterprise SharePoint estates routinely accumulate years of `EveryoneExceptExter
 - `ai/Invoke-GroundingLeakageAudit.ps1` — Purview label & caller clearance grounding evaluator.
 - `ai/Test-PromptInjectionSensitivityBoundary.ps1` — Indirect prompt-injection detector for RAG chunks.
 - `ai/dspm-grounding-eval-cases.json` — Synthetic Contoso evaluation matrix.
+- `identity/PurviewIdentityClearance.psm1` — Microsoft Graph v2.x module for Entra ID caller clearance tiering and SharePoint oversharing audit/revocation.
 - `graph/Invoke-SharePointOversharingQuarantine.ps1` — Microsoft Graph v2.x SharePoint ACL revocation & CISO Teams card dispatcher.
 - `queries/Purview-AiGrounding-Exposure.kql` — Defender XDR `CloudAppEvents` KQL exposure query.
 - `docs/DSPM-AI-GOVERNANCE-RUNBOOK.md` — L2/L3 Information Protection & RSS runbook.
+
+### Chief Architect / Chief Engineer Pilot-Grafting Instructions
+1. **Entra ID Workload Identity & Graph Scopes**: Assign a Managed Identity to your AI orchestration runner with `Sites.Selected` (or `Sites.FullControl.All` for tenant-wide quarantine), `GroupMember.Read.All`, `User.Read.All`, and `ChannelMessage.Send`.
+2. **Graft Pre-LLM Grounding Gate**: Import `identity/PurviewIdentityClearance.psm1` in your Azure AI Search / Foundry retrieval pre-processor to resolve `Get-EntraCallerClearanceTier` before passing chunks to `ai/Invoke-GroundingLeakageAudit.ps1`—zero Bicep or Terraform required.
+3. **Quarantine High-Risk Sites Before Copilot Onboarding**: Run `Test-SharePointSiteGuestExposure` across pilot SharePoint sites and pipe flagged grants to `Revoke-SharePointOversharingGrant -WhatIf` for CISO sign-off.
 
 ### Exact PowerShell & Pester 6.x Verification Commands
 ```powershell
